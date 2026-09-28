@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign In | QueueSmart</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <main class="auth-layout">
+    <section class="intro" aria-label="About QueueSmart">
+      <a class="logo" href="index.html">queue<span>smart.</span></a>
+      <div class="intro-copy">
+        <p class="overline">A BETTER WAY TO WAIT</p>
+        <h1>Your place in line, wherever you are.</h1>
+        <p>Check a service, see an estimated wait, and know when your turn is getting close.</p>
+      </div>
+      <p class="intro-foot">A simple queue experience for visitors and staff.</p>
+    </section>
+
+    <section class="form-panel" aria-labelledby="page-title">
+      <div class="form-content">
+        <p class="overline">WELCOME BACK</p>
+        <h2 id="page-title">Sign in</h2>
+        <p class="form-subtitle">Enter your details to explore the QueueSmart user screens.</p>
+
+        <!-- A2 UI preview: native browser validation only. No account is checked or saved. -->
+        <form action="dashboard.html" method="get">
+          <div class="field">
+            <label for="login-email">Email address</label>
+            <input id="login-email" type="email" autocomplete="email" placeholder="name@example.com" maxlength="254" required>
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" autocomplete="current-password" placeholder="At least 8 characters" minlength="8" maxlength="72" required>
+          </div>
+          <button class="primary-button" type="submit">View user dashboard</button>
+        </form>
+
+        <p class="switch-page">New to QueueSmart? <a href="register.html">Create an account</a></p>
+        <p class="switch-page">Staff member? <a href="admin.html">Preview admin dashboard</a></p>
+        <p class="demo-note">A2 preview: this form checks the input format but does not sign in or store a password.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

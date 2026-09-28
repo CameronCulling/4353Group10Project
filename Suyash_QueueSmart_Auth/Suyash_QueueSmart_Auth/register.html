@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create an Account | QueueSmart</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <main class="auth-layout">
+    <section class="intro" aria-label="About QueueSmart">
+      <a class="logo" href="index.html">queue<span>smart.</span></a>
+      <div class="intro-copy">
+        <p class="overline">GET STARTED</p>
+        <h1>Spend less time standing in line.</h1>
+        <p>Create a visitor or staff account to see how QueueSmart could make busy service desks easier to manage.</p>
+      </div>
+      <p class="intro-foot">Designed for browsers on phones, tablets, and laptops.</p>
+    </section>
+
+    <section class="form-panel" aria-labelledby="page-title">
+      <div class="form-content">
+        <p class="overline">JOIN QUEUESMART</p>
+        <h2 id="page-title">Create an account</h2>
+        <p class="form-subtitle">Fill in the fields to preview the registration flow.</p>
+
+        <!-- A2 UI preview: native browser validation only. No account is created. -->
+        <form action="dashboard.html" method="get">
+          <div class="field">
+            <label for="register-email">Email address</label>
+            <input id="register-email" type="email" autocomplete="email" placeholder="name@example.com" maxlength="254" required>
+          </div>
+          <div class="field">
+            <label for="register-password">Password</label>
+            <input id="register-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" maxlength="72" required>
+            <small>Use at least 8 characters.</small>
+          </div>
+          <div class="field">
+            <label for="account-role">Account type</label>
+            <select id="account-role" required>
+              <option value="" selected disabled>Select an account type</option>
+              <option value="user">User</option>
+              <option value="admin">Administrator</option>
+            </select>
+            <small>Choosing a role is a design preview; access is not granted.</small>
+          </div>
+          <button class="primary-button" type="submit">Preview user dashboard</button>
+        </form>
+
+        <p class="switch-page">Already have an account? <a href="index.html">Sign in</a></p>
+        <p class="demo-note">A2 preview: the form validates fields, but does not create an account or store a password.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
