@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Join Queue | QueueSmart</title>
+  <link rel="stylesheet" href="user.css">
+</head>
+
+<body>
+
+<header class="site-header">
+  <a class="logo" href="dashboard.html">
+    queue<span>smart.</span>
+  </a>
+  <nav class="main-nav">
+    <a href="dashboard.html">
+      Dashboard
+    </a>
+    <a class="active" href="join-queue.html">
+      Join Queue
+    </a>
+    <a href="queue-status.html">
+      Queue Status
+    </a>
+    <a href="history.html">
+      History
+    </a>
+    <a class="logout-link" href="index.html">
+      Sign out
+    </a>
+  </nav>
+</header>
+
+
+<main class="page-container">
+
+  <section class="page-heading">
+    <p class="overline">JOIN A QUEUE</p>
+    <h1>Choose a service.</h1>
+    <p>
+      Select the service you need and we'll show you
+      the current estimated wait.
+    </p>
+  </section>
+
+  <section class="form-card">
+    <form id="queue-form">
+      <div class="field">
+        <label for="service">
+          Service
+        </label>
+        <select id="service"
+                name="service"
+                required>
+          <option value="" selected disabled>
+            Select a service
+          </option>
+          <option value="dmv">
+            DMV Services
+          </option>
+          <option value="advising">
+            Student Advising
+          </option>
+          <option value="financial">
+            Financial Aid
+          </option>
+        </select>
+
+        <small>
+          Select the service you need.
+        </small>
+
+      </div>
+
+      <div class="card">
+        <h3>ESTIMATED WAIT</h3>
+        <p id="wait-display">
+          Select a service to see the estimated wait.
+        </p>
+
+      </div>
+      <br>
+
+
+      <button class="primary-button"
+              type="submit">
+        Join Queue
+
+      </button>
+    </form>
+  </section>
+</main>
+
+<script>
+
+const serviceSelect =
+  document.getElementById("service");
+const waitDisplay =
+  document.getElementById("wait-display");
+const queueForm =
+  document.getElementById("queue-form");
+
+const waitTimes = {
+  dmv: "Approximately 25 minutes",
+  advising: "Approximately 10 minutes",
+  financial: "Approximately 20 minutes"
+};
+
+serviceSelect.addEventListener(
+  "change",
+  function () {
+    const service = serviceSelect.value;
+    waitDisplay.textContent =
+      waitTimes[service];
+
+  }
+);
+
+
+queueForm.addEventListener(
+  "submit",
+  function (event) {
+    event.preventDefault();
+    if (!queueForm.checkValidity()) {
+      queueForm.reportValidity();
+      return;
+    }
+    window.location.href =
+      "queue-status.html";
+  }
+);
+
+</script>
+
+</body>
+
+</html>

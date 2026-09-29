@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard | QueueSmart</title>
+  <link rel="stylesheet" href="user.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="dashboard.html">
+    queue<span>smart.</span>
+  </a>
+  <nav class="main-nav" aria-label="Main navigation">
+    <a class="active" href="dashboard.html">
+      Dashboard
+    </a>
+    <a href="join-queue.html">
+      Join Queue
+    </a>
+    <a href="queue-status.html">
+      Queue Status
+    </a>
+    <a href="history.html">
+      History
+    </a>
+    <a class="logout-link" href="index.html">
+      Sign out
+    </a>
+  </nav>
+</header>
+
+<main class="page-container">
+
+  <section class="page-heading">
+    <p class="overline">YOUR QUEUES</p>
+    <h1>Welcome back.</h1>
+    <p>
+      See your current queue, explore available services,
+      and keep track of your recent activity.
+    </p>
+  </section>
+
+  <section class="dashboard-grid">
+    <div class="stat-card">
+      <h3>CURRENT POSITION</h3>
+      <div class="stat-number">#7</div>
+      <div class="stat-description">
+        DMV Services
+      </div>
+    </div>
+    <div class="stat-card">
+      <h3>ESTIMATED WAIT</h3>
+      <div class="stat-number">25 min</div>
+      <div class="stat-description">
+        Approximately
+      </div>
+    </div>
+    <div class="stat-card">
+      <h3>QUEUE STATUS</h3>
+      <div class="stat-number">Waiting</div>
+      <div class="stat-description">
+        You'll be notified when you're close.
+      </div>
+    </div>
+  </section>
+
+  <section class="dashboard-sections">
+    <div class="card">
+      <h2>Available services</h2>
+      <p>
+        Choose a service to join its queue.
+      </p>
+      <div class="service-list">
+        <div class="service-item">
+          <div>
+            <div class="service-name">
+              DMV Services
+            </div>
+            <div class="service-wait">
+              Estimated wait: 25 minutes
+            </div>
+          </div>
+          <a href="join-queue.html">
+            Join
+          </a>
+        </div>
+
+        <div class="service-item">
+          <div>
+            <div class="service-name">
+              Student Advising
+            </div>
+            <div class="service-wait">
+              Estimated wait: 10 minutes
+            </div>
+          </div>
+          <a href="join-queue.html">
+            Join
+          </a>
+        </div>
+        <div class="service-item">
+          <div>
+            <div class="service-name">
+              Financial Aid
+            </div>
+            <div class="service-wait">
+              Estimated wait: 20 minutes
+            </div>
+          </div>
+          <a href="join-queue.html">
+            Join
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Notifications</h2>
+      <p>
+        Recent queue updates.
+      </p>
+      <div class="notification-list">
+        <div class="notification">
+          <strong>Queue update</strong>
+          You are now #7 in the DMV Services queue.
+        </div>
+        <div class="notification">
+          <strong>Wait time updated</strong>
+          Your estimated wait is now 25 minutes.
+        </div>
+        <div class="notification">
+          <strong>Reminder</strong>
+          We'll notify you when your turn is approaching.
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

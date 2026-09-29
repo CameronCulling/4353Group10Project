@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Queue Status | QueueSmart</title>
+  <link rel="stylesheet" href="user.css">
+</head>
+
+<body>
+
+<header class="site-header">
+  <a class="logo" href="dashboard.html">
+    queue<span>smart.</span>
+  </a>
+  <nav class="main-nav">
+    <a href="dashboard.html">
+      Dashboard
+    </a>
+    <a href="join-queue.html">
+      Join Queue
+    </a>
+    <a class="active" href="queue-status.html">
+      Queue Status
+    </a>
+    <a href="history.html">
+      History
+    </a>
+    <a class="logout-link" href="index.html">
+      Sign out
+    </a>
+  </nav>
+</header>
+
+<main class="page-container">
+
+  <section class="page-heading">
+    <p class="overline">CURRENT QUEUE</p>
+    <h1>Your place in line.</h1>
+    <p>
+      We'll keep you updated as the queue moves.
+    </p>
+  </section>
+
+  <section class="queue-status-card">
+    <h2>DMV Services</h2>
+    <p class="queue-service">
+      Current queue
+    </p>
+    <div class="position-label">
+      YOUR POSITION
+    </div>
+    <div class="position-number"
+         id="position">
+      #7
+
+    </div>
+
+    <div class="wait-label">
+      ESTIMATED WAIT
+    </div>
+
+    <div class="wait-time"
+         id="wait-time">
+      25 minutes
+    </div>
+
+    <div class="wait-label">
+      STATUS
+    </div>
+
+    <span class="status-badge"
+          id="status">
+      Waiting
+    </span>
+
+    <br><br>
+
+    <button class="danger-button"
+            id="leave-button">
+      Leave Queue
+    </button>
+  </section>
+
+  <br>
+
+  <section class="card">
+    <h2>Recent updates</h2>
+    <div class="notification-list">
+      <div class="notification">
+        <strong>Queue update</strong>
+        You are currently #7 in line.
+      </div>
+
+      <div class="notification">
+        <strong>Estimated wait</strong>
+        Your estimated wait is approximately
+        25 minutes.
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+
+const leaveButton =
+  document.getElementById("leave-button");
+
+leaveButton.addEventListener(
+  "click",
+  function () {
+
+    const confirmed = confirm(
+      "Are you sure you want to leave the queue?"
+    );
+
+    if (confirmed) {
+
+      window.location.href =
+        "dashboard.html";
+
+    }
+
+  }
+);
+
+</script>
+</body>
+</html>
