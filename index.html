@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | QueueSmart</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <h1>Admin Dashboard | QueueSmart</h1>
+
+        <nav>
+            <a href="index.html">Dashboard</a>
+            <a href="services.html">Services</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section class="page-header">
+            <div>
+                <h2>Overview</h2>
+                <p>Monitor services and manage queues.</p>
+            </div>
+        </section>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <h3>Total Services</h3>
+                <p id="totalServices">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Open Queues</h3>
+                <p id="openQueues">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>People Waiting</h3>
+                <p id="peopleWaiting">0</p>
+            </div>
+
+        </section>
+
+        <section class="card">
+
+            <div class="section-header">
+                <h2>Services</h2>
+
+                <a class="button primary" href="services.html">
+                    Manage Services
+                </a>
+            </div>
+
+            <div id="serviceList"></div>
+
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
