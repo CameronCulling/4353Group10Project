@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notifications | QueueSmart</title>
+  <link rel="stylesheet" href="user.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="logo"
+       href="../Harris_Khan_QueueSmart_userdash/dashboard.html">
+      queue<span>smart.</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="../Harris_Khan_QueueSmart_userdash/dashboard.html">
+        Dashboard
+      </a>
+
+      <a href="../Harris_Khan_QueueSmart_userdash/join-queue.html">
+        Join Queue
+      </a>
+
+      <a href="../Harris_Khan_QueueSmart_userdash/queue-status.html">
+        Queue Status
+      </a>
+
+      <a href="../Harris_Khan_QueueSmart_userdash/history.html">
+        History
+      </a>
+
+      <a class="active"
+         href="notifications.html"
+         aria-current="page">
+        Notifications
+      </a>
+    </nav>
+  </header>
+
+  <main class="page-container">
+    <section class="page-heading">
+      <p class="overline">QUEUE UPDATES</p>
+      <h1>Your notifications.</h1>
+      <p>
+        Keep track of your queue position, wait time,
+        and upcoming turn.
+      </p>
+    </section>
+
+    <section class="card" aria-labelledby="updates-heading">
+      <h2 id="updates-heading">Recent notifications</h2>
+      <p>Example notifications for this prototype.</p>
+
+      <p id="unread-count" role="status">
+        3 unread notifications
+      </p>
+
+      <p id="storage-message" role="status" hidden></p>
+
+      <button class="secondary-button"
+              id="mark-all-read"
+              type="button">
+        Mark all as read
+      </button>
+
+      <div class="notification-list">
+        <article class="notification"
+                 data-id="demo-position-update"
+                 data-read="false">
+          <strong>Queue position updated</strong>
+          <p>You are now #7 in the DMV Services queue.</p>
+          <small>Today · 2:30 PM</small>
+
+          <p>
+            <button class="secondary-button mark-read"
+                    type="button">
+              Mark as read
+            </button>
+          </p>
+        </article>
+
+        <article class="notification"
+                 data-id="demo-wait-update"
+                 data-read="false">
+          <strong>Estimated wait updated</strong>
+          <p>
+            Your estimated wait for DMV Services
+            is now 25 minutes.
+          </p>
+          <small>Today · 2:25 PM</small>
+
+          <p>
+            <button class="secondary-button mark-read"
+                    type="button">
+              Mark as read
+            </button>
+          </p>
+        </article>
+
+        <article class="notification"
+                 data-id="demo-queue-joined"
+                 data-read="false">
+          <strong>You joined the queue</strong>
+          <p>
+            You successfully joined the DMV Services queue.
+          </p>
+          <small>Today · 2:20 PM</small>
+
+          <p>
+            <button class="secondary-button mark-read"
+                    type="button">
+              Mark as read
+            </button>
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Find the notification cards and controls.
+    const notifications = document.querySelectorAll(
+      ".notification[data-id]"
+    );
+    const unreadCount = document.getElementById("unread-count");
+    const markAllButton = document.getElementById("mark-all-read");
+    const storageMessage = document.getElementById("storage-message");
+
+    const storageKey = "queuesmart-demo-read-notifications";
+    let readIds = [];
+
+    function showStorageMessage() {
+      storageMessage.textContent =
+        "Read status could not be saved or restored in this browser.";
+      storageMessage.hidden = false;
+    }
+
+    // Load saved read status from this browser.
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey));
+
+      if (Array.isArray(saved)) {
+        readIds = saved.filter(function (id) {
+          return typeof id === "string";
+        });
+      }
+    } catch (error) {
+      showStorageMessage();
+    }
+
+    // Save the identifiers of notifications marked as read.
+    function saveReadStatus() {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(readIds));
+      } catch (error) {
+        showStorageMessage();
+      }
+    }
+
+    // Count unread cards and update the display.
+    function updateUnreadCount() {
+      let count = 0;
+
+      notifications.forEach(function (notification) {
+        if (notification.dataset.read === "false") {
+          count++;
+        }
+      });
+
+      unreadCount.textContent =
+        count + " unread notification" + (count === 1 ? "" : "s");
+
+      markAllButton.disabled = count === 0;
+    }
+
+    // Change a card's appearance and disable its read button.
+    function showAsRead(notification) {
+      notification.dataset.read = "true";
+      notification.style.backgroundColor = "#f4f8f6";
+      notification.style.borderLeftColor = "#6b8185";
+
+      const button = notification.querySelector(".mark-read");
+      button.textContent = "Read";
+      button.disabled = true;
+    }
+
+    function markAsRead(notification) {
+      showAsRead(notification);
+
+      const id = notification.dataset.id;
+
+      if (!readIds.includes(id)) {
+        readIds.push(id);
+      }
+    }
+
+    notifications.forEach(function (notification) {
+      // Restore this notification's saved read status.
+      if (readIds.includes(notification.dataset.id)) {
+        showAsRead(notification);
+      }
+
+      const button = notification.querySelector(".mark-read");
+
+      button.addEventListener("click", function () {
+        markAsRead(notification);
+        updateUnreadCount();
+        saveReadStatus();
+      });
+    });
+
+    markAllButton.addEventListener("click", function () {
+      notifications.forEach(function (notification) {
+        markAsRead(notification);
+      });
+
+      updateUnreadCount();
+      saveReadStatus();
+    });
+
+    updateUnreadCount();
+  </script>
+</body>
+</html>
