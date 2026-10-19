@@ -22,10 +22,10 @@
       <div class="form-content">
         <p class="overline">WELCOME BACK</p>
         <h2 id="page-title">Sign in</h2>
-        <p class="form-subtitle">Enter your details to explore the QueueSmart user screens.</p>
+        <p class="form-subtitle">Sign in to manage your real QueueSmart queues.</p>
 
-        <!-- A2 UI preview: native browser validation only. No account is checked or saved. -->
-        <form action="../../Harris_Khan_QueueSmart_userdash/dashboard.html" method="get">
+        
+        <form id="login-form">
           <div class="field">
             <label for="login-email">Email address</label>
             <input id="login-email" type="email" autocomplete="email" placeholder="name@example.com" maxlength="254" required>
@@ -34,14 +34,17 @@
             <label for="login-password">Password</label>
             <input id="login-password" type="password" autocomplete="current-password" placeholder="At least 8 characters" minlength="8" maxlength="72" required>
           </div>
-          <button class="primary-button" type="submit">View user dashboard</button>
+          <button class="primary-button" type="submit">Sign in</button>
+        <p id="form-error" role="alert" style="color:#b42318;font-weight:600"></p>
         </form>
 
         <p class="switch-page">New to QueueSmart? <a href="register.html">Create an account</a></p>
-        <p class="switch-page">Staff member? <a href="../../Cameron_Culling_QueueSmart_AdminDash/admin.html">Preview admin dashboard</a></p>
-        <p class="demo-note">A2 preview: this form checks the input format but does not sign in or store a password.</p>
+        <p class="switch-page">Staff members: use the administrator account to sign in here.</p>
+        <p class="demo-note">Demo administrator: admin@queuesmart.local / Admin12345! (local testing only)</p>
       </div>
     </section>
   </main>
+<script src="../../shared/api.js"></script>
+<script src="../../shared/auth-ui.js"></script>
 </body>
 </html>
