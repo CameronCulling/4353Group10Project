@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notifications | QueueSmart</title>
+  <link rel="stylesheet" href="user.css">
+  <script src="/shared/api.js" defer></script>
+  <script src="notifications-ui.js" defer></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="logo"
+       href="/Harris_Khan_QueueSmart_userdash/dashboard.html">
+      queue<span>smart.</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="/Harris_Khan_QueueSmart_userdash/dashboard.html">
+        Dashboard
+      </a>
+      <a href="/Harris_Khan_QueueSmart_userdash/join-queue.html">
+        Join Queue
+      </a>
+      <a href="/Harris_Khan_QueueSmart_userdash/queue-status.html">
+        Queue Status
+      </a>
+      <a href="/Harris_Khan_QueueSmart_userdash/history.html">
+        History
+      </a>
+      <a class="active"
+         href="notifications.html"
+         aria-current="page">
+        Notifications
+      </a>
+      <a class="logout-link" href="/Suyash_QueueSmart_Auth/index.html">
+      Sign out
+      </a>
+    </nav>
+  </header>
+
+  <main class="page-container">
+    <section class="page-heading">
+      <p class="overline">QUEUE UPDATES</p>
+      <h1>Your notifications.</h1>
+      <p>Updates from your queue activity.</p>
+    </section>
+
+    <section class="card" aria-labelledby="updates-heading">
+      <h2 id="updates-heading">Recent notifications</h2>
+
+      <p id="unread-count" role="status">
+        Loading notifications…
+      </p>
+
+      <p id="error-message" role="alert" hidden></p>
+
+      <button class="secondary-button"
+              id="refresh-button"
+              type="button">
+        Refresh
+      </button>
+
+      <button class="secondary-button"
+              id="mark-all-read"
+              type="button"
+              disabled>
+        Mark all as read
+      </button>
+
+      <div class="notification-list" id="notification-list"></div>
+    </section>
+  </main>
+</body>
+</html>
