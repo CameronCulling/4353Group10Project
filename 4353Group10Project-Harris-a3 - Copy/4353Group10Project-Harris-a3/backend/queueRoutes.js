@@ -1,4 +1,10 @@
 const {
+    recordQueueJoin,
+    recordQueueExit,
+    notifyNearbyUsers
+} = require("./activityLogic");
+
+const {
     estimateWait,
     joinQueue,
     leaveQueue,
@@ -72,6 +78,13 @@ function registerQueueRoutes(app, store, fail, auth) {
         try {
             const result = joinQueue(queue, req.user.id);
 
+            const entry = queue.find(
+                item => item.userId === req.user.id
+            );
+
+            recordQueueJoin(store, req.user.id, service, entry);
+            notifyNearbyUsers(store, service, queue);
+
             res.status(201).json({
                 message: "Successfully joined queue.",
                 serviceId,
@@ -108,7 +121,17 @@ function registerQueueRoutes(app, store, fail, auth) {
         const queue = getQueue(serviceId);
 
         try {
-            leaveQueue(queue, req.user.id);
+            const entry = leaveQueue(queue, req.user.id);
+
+            recordQueueExit(
+                store,
+                req.user.id,
+                service,
+                entry,
+                "left"
+            );
+
+            notifyNearbyUsers(store, service, queue);
 
             res.json({
                 message: "Successfully left queue.",

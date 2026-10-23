@@ -10,6 +10,14 @@ const {
 
 const { registerQueueRoutes } = require("./queueRoutes");
 
+const {
+    registerNotificationRoutes
+} = require("./notificationRoutes");
+
+const {
+    registerHistoryRoutes
+} = require("./historyRoutes");
+
 function createApp() {
     const app = express();
 
@@ -34,6 +42,9 @@ function createApp() {
     // Register queue routes
     registerQueueRoutes(app, store, fail, auth);
 
+    registerNotificationRoutes(app, store, fail, auth);
+    registerHistoryRoutes(app, store, fail, auth);
+
     // Future teammate routes:
     // registerServiceRoutes(app, store, fail, auth);
     // registerAdminRoutes(app, store, fail, auth);
@@ -53,7 +64,17 @@ function createApp() {
         )
     );
 
-    // Add other frontend directories when needed.
+    app.use("/Sarah_Andrus_QueueSmart_Notifs",
+        express.static(
+            path.join(root, "Sarah_Andrus_QueueSmart_Notifs")
+        )
+    );
+
+    app.use("/Suyash_QueueSmart_Auth",
+        express.static(
+            path.join(root, "Suyash_QueueSmart_Auth")
+        )
+    );
 
     // Unknown API endpoint
     app.use("/api", (req, res) => {

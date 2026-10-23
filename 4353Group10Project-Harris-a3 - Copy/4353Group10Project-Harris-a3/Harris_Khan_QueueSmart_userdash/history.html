@@ -2,101 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>History | QueueSmart</title>
   <link rel="stylesheet" href="user.css">
+  <script src="/shared/api.js" defer></script>
+  <script src="history-ui.js" defer></script>
 </head>
 
 <body>
-<header class="site-header">
-  <a class="logo" href="dashboard.html">
-    queue<span>smart.</span>
-  </a>
-  <nav class="main-nav">
-    <a href="dashboard.html">
-      Dashboard
+  <header class="site-header">
+    <a class="logo" href="dashboard.html">
+      queue<span>smart.</span>
     </a>
-    <a href="join-queue.html">
-      Join Queue
-    </a>
-    <a href="queue-status.html">
-      Queue Status
-    </a>
-    <a class="active" href="history.html">
-      History
-    </a>
-    <a href="../Sarah_Andrus_QueueSmart_Notifs/notifications.html">
-      Notifications
-    </a>
-    <a class="logout-link" href="index.html">
-      Sign out
-    </a>
-  </nav>
-</header>
 
-<main class="page-container">
-  <section class="page-heading">
-    <p class="overline">QUEUE HISTORY</p>
-    <h1>Your past queues.</h1>
-    <p>
-      Review the services you've previously joined.
-    </p>
-  </section>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="join-queue.html">Join Queue</a>
+      <a href="queue-status.html">Queue Status</a>
+      <a class="active" href="history.html" aria-current="page">
+        History
+      </a>
+      <a href="/Sarah_Andrus_QueueSmart_Notifs/notifications.html">
+        Notifications
+      </a>
+    </nav>
+  </header>
 
-  <section class="table-card">
-    <table class="history-table">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Service</th>
-          <th>Wait Time</th>
-          <th>Outcome</th>
-        </tr>
-      </thead>
+  <main class="page-container">
+    <section class="page-heading">
+      <p class="overline">YOUR ACTIVITY</p>
+      <h1>Your queue history.</h1>
+      <p>Review your current and past queue visits.</p>
+    </section>
 
-      <tbody>
-        <tr>
-          <td>09/25/2026</td>
-          <td>Student Advising</td>
-          <td>12 minutes</td>
-          <td class="outcome-served">
-            Served
-          </td>
-        </tr>
+    <section class="table-card" aria-labelledby="history-heading">
+      <h2 id="history-heading">Queue visits</h2>
 
+      <button class="secondary-button"
+              id="refresh-history"
+              type="button">
+        Refresh
+      </button>
 
-        <tr>
-          <td>09/20/2026</td>
-          <td>Financial Aid</td>
-          <td>25 minutes</td>
-          <td class="outcome-served">
-            Served
-          </td>
-        </tr>
+      <p id="history-status" role="status">Loading history…</p>
+      <p id="history-error" role="alert" hidden></p>
 
-        <tr>
-          <td>09/15/2026</td>
-          <td>DMV Services</td>
-          <td>31 minutes</td>
-          <td class="outcome-served">
-            Served
-          </td>
-        </tr>
-
-
-        <tr>
-          <td>09/10/2026</td>
-          <td>Student Advising</td>
-          <td>8 minutes</td>
-          <td class="outcome-left">
-            Left Queue
-          </td>
-
-        </tr>
-      </tbody>
-    </table>
-  </section>
-</main>
+      <table class="history-table">
+        <caption>Queue participation for your account</caption>
+        <thead>
+          <tr>
+            <th scope="col">Joined</th>
+            <th scope="col">Service</th>
+            <th scope="col">Ended</th>
+            <th scope="col">Time waited</th>
+            <th scope="col">Outcome</th>
+          </tr>
+        </thead>
+        <tbody id="history-rows"></tbody>
+      </table>
+    </section>
+  </main>
 </body>
 </html>
