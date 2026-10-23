@@ -49,7 +49,7 @@
   </section>
 
   <section class="queue-status-card">
-    <h2>DMV Services</h2>
+    <h2 id="service-name">DMV Services</h2>
     <p class="queue-service">
       Current queue
     </p>
@@ -107,29 +107,7 @@
   </section>
 </main>
 
-<script>
-
-const leaveButton =
-  document.getElementById("leave-button");
-
-leaveButton.addEventListener(
-  "click",
-  function () {
-
-    const confirmed = confirm(
-      "Are you sure you want to leave the queue?"
-    );
-
-    if (confirmed) {
-
-      window.location.href =
-        "dashboard.html";
-
-    }
-
-  }
-);
-
-</script>
+<script src="../shared/api.js"></script>
+<script src="queue-status-ui.js"></script>
 </body>
 </html>

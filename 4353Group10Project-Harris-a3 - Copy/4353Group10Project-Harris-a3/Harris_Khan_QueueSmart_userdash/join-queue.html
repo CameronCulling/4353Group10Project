@@ -98,46 +98,8 @@
   </section>
 </main>
 
-<script>
-
-const serviceSelect =
-  document.getElementById("service");
-const waitDisplay =
-  document.getElementById("wait-display");
-const queueForm =
-  document.getElementById("queue-form");
-
-const waitTimes = {
-  dmv: "Approximately 25 minutes",
-  advising: "Approximately 10 minutes",
-  financial: "Approximately 20 minutes"
-};
-
-serviceSelect.addEventListener(
-  "change",
-  function () {
-    const service = serviceSelect.value;
-    waitDisplay.textContent =
-      waitTimes[service];
-
-  }
-);
-
-
-queueForm.addEventListener(
-  "submit",
-  function (event) {
-    event.preventDefault();
-    if (!queueForm.checkValidity()) {
-      queueForm.reportValidity();
-      return;
-    }
-    window.location.href =
-      "queue-status.html";
-  }
-);
-
-</script>
+<script src="../shared/api.js"></script>
+<script src="queue-ui.js"></script>
 
 </body>
 

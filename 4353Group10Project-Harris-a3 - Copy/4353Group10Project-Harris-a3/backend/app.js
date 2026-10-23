@@ -1,0 +1,93 @@
+const express = require("express");
+const path = require("node:path");
+
+const { createStore } = require("./store");
+
+const {
+    createAuthMiddleware,
+    registerAuthRoutes
+} = require("./authRoutes");
+
+const { registerQueueRoutes } = require("./queueRoutes");
+
+const {
+    registerNotificationRoutes
+} = require("./notificationRoutes");
+
+const {
+    registerHistoryRoutes
+} = require("./historyRoutes");
+
+function createApp() {
+    const app = express();
+
+    const store = createStore();
+
+    // Parse JSON request bodies
+    app.use(express.json({ limit: "10kb" }));
+
+    // Standard error response
+    function fail(res, status, message) {
+        return res.status(status).json({
+            error: message
+        });
+    }
+
+    // Authentication middleware
+    const auth = createAuthMiddleware(store, fail);
+
+    // Register authentication routes
+    registerAuthRoutes(app, store, fail, auth);
+
+    // Register queue routes
+    registerQueueRoutes(app, store, fail, auth);
+
+    registerNotificationRoutes(app, store, fail, auth);
+    registerHistoryRoutes(app, store, fail, auth);
+
+    // Future teammate routes:
+    // registerServiceRoutes(app, store, fail, auth);
+    // registerAdminRoutes(app, store, fail, auth);
+    // registerNotificationRoutes(app, store, fail, auth);
+    // registerHistoryRoutes(app, store, fail, auth);
+
+    // Serve frontend files
+    const root = path.join(__dirname, "..");
+
+    app.use("/shared",
+        express.static(path.join(root, "shared"))
+    );
+
+    app.use("/Harris_Khan_QueueSmart_userdash",
+        express.static(
+            path.join(root, "Harris_Khan_QueueSmart_userdash")
+        )
+    );
+
+    app.use("/Sarah_Andrus_QueueSmart_Notifs",
+        express.static(
+            path.join(root, "Sarah_Andrus_QueueSmart_Notifs")
+        )
+    );
+
+    app.use("/Suyash_QueueSmart_Auth",
+        express.static(
+            path.join(root, "Suyash_QueueSmart_Auth")
+        )
+    );
+
+    // Unknown API endpoint
+    app.use("/api", (req, res) => {
+        return fail(res, 404, "API endpoint not found.");
+    });
+
+    // Handle unexpected server errors
+    app.use((err, req, res, next) => {
+        console.error(err);
+        return fail(res, 500, "Internal server error.");
+    });
+
+    return app;
+}
+
+module.exports = { createApp };

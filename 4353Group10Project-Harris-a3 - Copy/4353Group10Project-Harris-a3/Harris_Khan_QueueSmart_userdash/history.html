@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>History | QueueSmart</title>
+  <link rel="stylesheet" href="user.css">
+  <script src="/shared/api.js" defer></script>
+  <script src="history-ui.js" defer></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="logo" href="dashboard.html">
+      queue<span>smart.</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="join-queue.html">Join Queue</a>
+      <a href="queue-status.html">Queue Status</a>
+      <a class="active" href="history.html" aria-current="page">
+        History
+      </a>
+      <a href="/Sarah_Andrus_QueueSmart_Notifs/notifications.html">
+        Notifications
+      </a>
+    </nav>
+  </header>
+
+  <main class="page-container">
+    <section class="page-heading">
+      <p class="overline">YOUR ACTIVITY</p>
+      <h1>Your queue history.</h1>
+      <p>Review your current and past queue visits.</p>
+    </section>
+
+    <section class="table-card" aria-labelledby="history-heading">
+      <h2 id="history-heading">Queue visits</h2>
+
+      <button class="secondary-button"
+              id="refresh-history"
+              type="button">
+        Refresh
+      </button>
+
+      <p id="history-status" role="status">Loading history…</p>
+      <p id="history-error" role="alert" hidden></p>
+
+      <table class="history-table">
+        <caption>Queue participation for your account</caption>
+        <thead>
+          <tr>
+            <th scope="col">Joined</th>
+            <th scope="col">Service</th>
+            <th scope="col">Ended</th>
+            <th scope="col">Time waited</th>
+            <th scope="col">Outcome</th>
+          </tr>
+        </thead>
+        <tbody id="history-rows"></tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
