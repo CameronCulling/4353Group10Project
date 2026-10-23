@@ -8,5 +8,6 @@ To run :
 6. Navigate to website by opening a browser and typing: http://localhost:3000/
 7. Create a user account, this will then be active while the server is open
 8. Login on another tab using the admin account details if so desired
-9. To run code tests and coverage report, navigate to backend using command prompt again and type: npm run coverage
+9. Stop server using: ctrl + c
+10. To run code tests and coverage report, navigate to backend using command prompt again and type: npm run coverage
 
