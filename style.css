@@ -1,0 +1,376 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #1f2937;
+}
+
+
+/* Navigation */
+
+.navbar {
+    background: #1f2937;
+    color: white;
+
+    padding: 18px 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.navbar nav {
+    display: flex;
+    gap: 20px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+
+/* Main content */
+
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+
+/* Page heading */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.page-header h2 {
+    margin-bottom: 5px;
+}
+
+.page-header p {
+    color: #6b7280;
+}
+
+
+/* Cards */
+
+.card {
+    background: white;
+
+    border-radius: 10px;
+
+    padding: 25px;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Statistics */
+
+.stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card h3 {
+    margin-top: 0;
+
+    color: #6b7280;
+
+    font-size: 15px;
+}
+
+.stat-card p {
+    font-size: 32px;
+
+    font-weight: bold;
+
+    margin-bottom: 0;
+}
+
+
+/* Section header */
+
+.section-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+
+/* Buttons */
+
+.button {
+    border: none;
+
+    border-radius: 6px;
+
+    padding: 10px 16px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    text-decoration: none;
+
+    display: inline-block;
+}
+
+.primary {
+    background: #2563eb;
+
+    color: white;
+}
+
+.primary:hover {
+    background: #1d4ed8;
+}
+
+.secondary {
+    background: #e5e7eb;
+
+    color: #111827;
+}
+
+.danger {
+    background: #dc2626;
+
+    color: white;
+}
+
+.success {
+    background: #16a34a;
+
+    color: white;
+}
+
+
+/* Forms */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+
+    padding: 11px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+}
+
+.form-group textarea {
+    min-height: 120px;
+
+    resize: vertical;
+}
+
+.form-group small {
+    display: block;
+
+    color: #6b7280;
+
+    margin-top: 5px;
+}
+
+.form-actions {
+    display: flex;
+
+    gap: 10px;
+}
+
+
+/* Tables */
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 14px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    text-align: left;
+}
+
+th {
+    background: #f9fafb;
+}
+
+
+/* Status badges */
+
+.badge {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.badge.open {
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+.badge.closed {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+.badge.low {
+    background: #e0f2fe;
+
+    color: #075985;
+}
+
+.badge.medium {
+    background: #fef3c7;
+
+    color: #92400e;
+}
+
+.badge.high {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+/* Queue */
+
+.queue-item {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 15px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.queue-position {
+    width: 40px;
+
+    font-weight: bold;
+
+    color: #6b7280;
+}
+
+.queue-user {
+    flex: 1;
+}
+
+.queue-user strong {
+    display: block;
+}
+
+.queue-user small {
+    color: #6b7280;
+}
+
+.queue-actions {
+    display: flex;
+
+    gap: 5px;
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .navbar {
+        padding: 15px 20px;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+}
