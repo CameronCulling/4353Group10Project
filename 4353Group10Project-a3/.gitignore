@@ -1,0 +1,13 @@
+# Node.js dependencies
+**/node_modules/
+
+# SQLite database files
+**/*.sqlite
+**/*.sqlite-wal
+**/*.sqlite-shm
+**/*.sqlite-journal
+
+# Environment variables
+.env
+**/.env
+**/.env.local

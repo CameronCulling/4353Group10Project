@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("node:path");
 
 const { createStore } = require("./store");
+const userRepository = require("./userRepository");
 
 const {
     createAuthMiddleware,
@@ -29,11 +30,23 @@ function createApp() {
         });
     }
 
-    // Authentication middleware
-    const auth = createAuthMiddleware(store, fail);
+    
+// Authentication middleware using SQLite
+    const auth = createAuthMiddleware(
+        store,
+        fail,
+        userRepository
+    );
 
-    // Register authentication routes
-    registerAuthRoutes(app, store, fail, auth);
+// Register SQLite-backed authentication routes
+    registerAuthRoutes(
+        app,
+        store,
+        fail,
+        auth,
+        userRepository
+);
+
 
     // Register queue routes
     registerQueueRoutes(app, store, fail, auth);
