@@ -1,12 +1,13 @@
 // Authentication API unit/integration tests using Node.js's built-in test runner.
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { createApp } = require('../app');
+const { createTestApp } = require('./testHelpers');
 const { registrationError, loginError } = require('../validation');
 const { hashPassword, verifyPassword } = require('../store');
 
 async function withServer(run) {
-  const server = createApp().listen(0);
+  const { app, db } = createTestApp();
+  const server = app.listen(0);
   const root = `http://127.0.0.1:${server.address().port}`;
   async function request(path, method = 'GET', body, token) {
     const headers = {};
@@ -19,7 +20,13 @@ async function withServer(run) {
     return { status: response.status, data: await response.json().catch(() => null) };
   }
   try { await run(request); }
-  finally { await new Promise(resolve => server.close(resolve)); }
+  finally {
+    try {
+      await new Promise(resolve => server.close(resolve));
+    } finally {
+      db.close();
+    }
+  }
 }
 
 const valid = { name: 'Test User', email: 'User@Example.com', password: 'SecurePass123!' };

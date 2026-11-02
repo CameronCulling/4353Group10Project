@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS Service (
     expected_duration INTEGER NOT NULL
         CHECK (expected_duration > 0),
     priority_level TEXT NOT NULL DEFAULT 'normal'
-        CHECK (priority_level IN ('low', 'normal', 'high'))
+        CHECK (priority_level IN ('low', 'normal', 'medium', 'high'))
 );
 
 -- 4. Queues

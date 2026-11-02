@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("node:path");
 
 const { createStore } = require("./store");
-const userRepository = require("./userRepository");
+const { getDefaultUserRepository } = require("./userRepository");
 
 const {
     createAuthMiddleware,
@@ -15,10 +15,11 @@ const { registerAdminRoutes } = require("./adminRoutes");
 const { registerNotificationRoutes } = require("./notificationRoutes");
 const { registerHistoryRoutes } = require("./historyRoutes");
 
-function createApp() {
+function createApp({ userRepository } = {}) {
     const app = express();
 
     const store = createStore();
+    const users = userRepository || getDefaultUserRepository();
 
     // Parse JSON request bodies
     app.use(express.json({ limit: "10kb" }));
@@ -35,7 +36,7 @@ function createApp() {
     const auth = createAuthMiddleware(
         store,
         fail,
-        userRepository
+        users
     );
 
 // Register SQLite-backed authentication routes
@@ -44,7 +45,7 @@ function createApp() {
         store,
         fail,
         auth,
-        userRepository
+        users
 );
 
 

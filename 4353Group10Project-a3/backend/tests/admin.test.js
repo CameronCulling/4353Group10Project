@@ -2,7 +2,7 @@
 
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
-const { createApp } = require("../app");
+const { createTestApp } = require("./testHelpers");
 
 /*
 ==========================================
@@ -11,7 +11,8 @@ TEST SERVER SETUP
 */
 
 async function withServer(run) {
-    const server = createApp().listen(0);
+    const { app, db } = createTestApp();
+    const server = app.listen(0);
 
     await new Promise(resolve => {
         server.once("listening", resolve);
@@ -47,12 +48,16 @@ async function withServer(run) {
     try {
         await run(request);
     } finally {
-        await new Promise((resolve, reject) => {
-            server.close(error => {
-                if (error) reject(error);
-                else resolve();
+        try {
+            await new Promise((resolve, reject) => {
+                server.close(error => {
+                    if (error) reject(error);
+                    else resolve();
+                });
             });
-        });
+        } finally {
+            db.close();
+        }
     }
 }
 

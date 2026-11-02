@@ -11,18 +11,21 @@ const testDir = fs.mkdtempSync(
     path.join(os.tmpdir(), 'queuesmart-test-')
 );
 
-process.env.QUEUESMART_DB_PATH = path.join(
+const testDatabasePath = path.join(
     testDir,
     'test.sqlite'
 );
 
-// Set the path BEFORE loading the application.
 const { createApp } = require('../app');
-const db = require('../db');
+const { createDatabase } = require('../db');
+const { createUserRepository } = require('../userRepository');
+const db = createDatabase(testDatabasePath);
+const users = createUserRepository(db);
 
 // Start a test server on an available port.
-async function withServer(runTest) {
-    const server = createApp().listen(0);
+async function withServer(runTest, repository = users) {
+    const app = createApp({ userRepository: repository });
+    const server = app.listen(0);
 
     await new Promise(resolve => {
         server.once('listening', resolve);
@@ -212,18 +215,44 @@ test('saved user can log in after app restart', async () => {
         assert.equal(response.status, 201);
     });
 
-    // Start a new Express app instance.
-    await withServer(async baseURL => {
-        const login = await post(
-            baseURL,
-            '/api/auth/login',
-            {
-                email: user.email,
-                password: user.password
-            }
-        );
+    const reopenedDb = createDatabase(testDatabasePath);
+    try {
+        await withServer(async baseURL => {
+            const login = await post(
+                baseURL,
+                '/api/auth/login',
+                {
+                    email: user.email,
+                    password: user.password
+                }
+            );
 
+            assert.equal(login.status, 200);
+        }, createUserRepository(reopenedDb));
+    } finally {
+        reopenedDb.close();
+    }
+});
+
+test('administrator is stored in SQLite', async () => {
+    const adminData = {
+        name: 'Database Administrator',
+        email: `${randomUUID()}@example.com`,
+        password: 'StrongAdminPassword123!'
+    };
+    const admin = users.createAdmin(adminData);
+    assert.equal(admin.role, 'admin');
+    const saved = users.findByEmail(adminData.email);
+    assert.ok(saved);
+    assert.equal(saved.role, 'admin');
+    await withServer(async baseURL => {
+        const login = await post(baseURL, '/api/auth/login', {
+            email: adminData.email,
+            password: adminData.password
+        });
         assert.equal(login.status, 200);
+        const data = await login.json();
+        assert.equal(data.user.role, 'admin');
     });
 });
 

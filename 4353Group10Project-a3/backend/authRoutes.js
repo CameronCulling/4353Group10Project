@@ -22,13 +22,7 @@ function createAuthMiddleware(store, fail, users) {
             : null;
 
         // Registered users come from SQLite.
-        // Keep the existing demo admin working temporarily.
-        req.user = userId
-            ? (
-                users.findById(userId) ||
-                store.users.find(user => user.id === userId)
-            )
-            : null;
+        req.user = userId ? users.findById(userId) : null;
 
         if (!req.user) {
             return fail(res, 401, 'Please sign in first.');
@@ -62,11 +56,8 @@ function registerAuthRoutes(app, store, fail, auth, users) {
 
         const email = req.body.email.trim().toLowerCase();
 
-        // Check SQLite and the existing demo admin
-        if (
-            users.findByEmail(email) ||
-            store.users.some(user => user.email === email)
-        ) {
+        // Check for an existing SQLite account
+        if (users.findByEmail(email)) {
             return fail(
                 res,
                 409,
@@ -117,8 +108,7 @@ function registerAuthRoutes(app, store, fail, auth, users) {
         const email = req.body.email.trim().toLowerCase();
 
         // Retrieve from SQLite, with legacy admin fallback
-        const user = users.findByEmail(email) ||
-            store.users.find(person => person.email === email);
+        const user = users.findByEmail(email);
 
         if (
             !user ||

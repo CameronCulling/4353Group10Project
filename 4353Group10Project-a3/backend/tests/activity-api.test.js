@@ -1,11 +1,12 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { once } = require("node:events");
-const { createApp } = require("../app");
+const { createTestApp } = require("./testHelpers");
 
 // Start a fresh server and in-memory store for each test.
 async function withServer(run) {
-  const server = createApp().listen(0, "127.0.0.1");
+  const { app, db } = createTestApp();
+  const server = app.listen(0, "127.0.0.1");
 
   try {
     await once(server, "listening");
@@ -53,10 +54,14 @@ async function withServer(run) {
 
     await run({ request, register });
   } finally {
-    await new Promise((resolve, reject) => {
-      server.close(error => error ? reject(error) : resolve());
-      server.closeAllConnections();
-    });
+    try {
+        await new Promise((resolve, reject) => {
+          server.close(error => error ? reject(error) : resolve());
+          server.closeAllConnections();
+        });
+    } finally {
+        db.close();
+    }
   }
 }
 

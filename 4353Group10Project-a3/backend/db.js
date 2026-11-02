@@ -3,22 +3,43 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { DatabaseSync } = require('node:sqlite');
 
-// Database file location
-const databasePath = process.env.QUEUESMART_DB_PATH
-    || path.join(__dirname, 'queuesmart.sqlite');
+// Create and initialize a SQLite database
+function createDatabase(filename) {
+    const location = filename ||
+        process.env.QUEUESMART_DB_PATH ||
+        path.join(__dirname, 'queuesmart.sqlite');
 
-// Open or create the SQLite database
-const db = new DatabaseSync(databasePath);
+    const database = new DatabaseSync(location);
 
-// Enable foreign key enforcement
-db.exec('PRAGMA foreign_keys = ON');
+    try {
+        database.exec('PRAGMA foreign_keys = ON');
 
-// Read and execute the database schema
-const schema = fs.readFileSync(
-    path.join(__dirname, 'schema.sql'),
-    'utf8'
-);
+        const schema = fs.readFileSync(
+            path.join(__dirname, 'schema.sql'),
+            'utf8'
+        );
 
-db.exec(schema);
+        database.exec(schema);
 
-module.exports = db;
+        return database;
+    } catch (error) {
+        database.close();
+        throw error;
+    }
+}
+
+// Create the main database only when needed
+let defaultDatabase = null;
+
+function getDefaultDatabase() {
+    if (!defaultDatabase) {
+        defaultDatabase = createDatabase();
+    }
+
+    return defaultDatabase;
+}
+
+module.exports = {
+    createDatabase,
+    getDefaultDatabase
+};
