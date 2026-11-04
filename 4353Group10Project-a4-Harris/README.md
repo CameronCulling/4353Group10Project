@@ -18,4 +18,4 @@ Set `QUEUESMART_ADMIN_EMAIL` and a unique `QUEUESMART_ADMIN_PASSWORD` of at leas
 
 Credentials and profiles are stored in `backend/queuesmart.sqlite`, or the path specified by `QUEUESMART_DB_PATH`. Sessions and other service/queue activity remain in memory. Tests use isolated databases and a test-only administrator; they do not use the real application database. Clear any temporary `QUEUESMART_DB_PATH` override before starting the app.
 
-The schema permits service priority `medium` for newly initialized databases. Existing tables are not migrated by `CREATE TABLE IF NOT EXISTS`; coordinate a migration with Cameron instead of deleting an existing database.
+The schema permits service priority `medium` for newly initialized databases. Existing tables are not migrated by `CREATE TABLE IF NOT EXISTS`; coordinate a migration with Cameron instead of deleting an existing database. serviceRoutes and activityLogic needs input from Cameron and Sarah
