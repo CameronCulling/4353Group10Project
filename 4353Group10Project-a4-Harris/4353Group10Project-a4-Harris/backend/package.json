@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "authRoutes.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js",
+    "coverage": "node --test --experimental-test-coverage tests/*.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
