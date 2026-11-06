@@ -17,5 +17,5 @@ USER ACCOUNTS:
 2. email: test@gmail.com, password: 87654321
 
 ADMIN ACCOUNT:
-2. email: admin@queuesmart.local, password: QueueSmartAdmin2026!
+1. email: admin@queuesmart.local, password: QueueSmartAdmin2026!
 
