@@ -1,7 +1,14 @@
+
+"use strict";
+
 const express = require("express");
 const path = require("node:path");
 
 const { createStore } = require("./store");
+
+const { getDefaultDatabase } = require("./db");
+const { getDefaultUserRepository } = require("./userRepository");
+const { createQueueRepository } = require("./queueRepository");
 
 const {
     createAuthMiddleware,
@@ -14,118 +21,173 @@ const { registerAdminRoutes } = require("./adminRoutes");
 const { registerNotificationRoutes } = require("./notificationRoutes");
 const { registerHistoryRoutes } = require("./historyRoutes");
 
-function createApp() {
-    const app = express();
 
+function createApp({
+    userRepository,
+    queueRepository
+} = {}) {
+
+    const app = express();
     const store = createStore();
 
-    // Parse JSON request bodies
+    // Use the same database connection for users and queues.
+    const db = getDefaultDatabase();
+
+    const users = userRepository ||
+        getDefaultUserRepository();
+
+    const queues = queueRepository ||
+        createQueueRepository(db);
+
     app.use(express.json({ limit: "10kb" }));
 
-    // Standard error response
+
+    // Standard API error response.
     function fail(res, status, message) {
         return res.status(status).json({
             error: message
         });
     }
 
-    // Authentication middleware
-    const auth = createAuthMiddleware(store, fail);
 
-    // Register authentication routes
-    registerAuthRoutes(app, store, fail, auth);
-
-    // Register queue routes
-    registerQueueRoutes(app, store, fail, auth);
-
-    // Register service management routes
-    registerServiceRoutes(app, store, fail, auth);
-
-    // Future teammate routes:
-     registerAdminRoutes(app, store, fail, auth);
-     registerNotificationRoutes(app, store, fail, auth);
-     registerHistoryRoutes(app, store, fail, auth);
-
-    // Serve frontend files
-    // Serve frontend files
-    const root = path.join(__dirname, "..");
-    const fs = require("node:fs");
-
-        
-// Support both possible admin folder locations
-    const nestedAdminDashPath = path.join(
-        __dirname,
-        "Cameron_Culling_QueueSmart_AdminDash"
+    // Authentication middleware.
+    const auth = createAuthMiddleware(
+        store,
+        fail,
+        users
     );
 
-    const siblingAdminDashPath = path.join(
-     root,
-    "Cameron_Culling_QueueSmart_AdminDash"
+
+    // Register API routes.
+    registerAuthRoutes(
+        app,
+        store,
+        fail,
+        auth,
+        users
     );
 
-    const adminDashPath = fs.existsSync(nestedAdminDashPath)
-     ? nestedAdminDashPath
-     : siblingAdminDashPath;
+    registerQueueRoutes(
+        app,
+        store,
+        fail,
+        auth,
+        queues
+    );
 
-// Redirect homepage to login
+    registerServiceRoutes(
+        app,
+        store,
+        fail,
+        auth,
+        db
+    );
+
+    registerAdminRoutes(
+        app,
+        store,
+        fail,
+        auth,
+        db);
+
+    registerNotificationRoutes(
+        app,
+        store,
+        fail,
+        auth
+    );
+
+    registerHistoryRoutes(
+        app,
+        store,
+        fail,
+        auth
+    );
+
+
+    // --------------------------------------------------
+    // FRONTEND STATIC FILES
+    // --------------------------------------------------
+
+    // Redirect the root page to the login page.
     app.get("/", (req, res) => {
         res.redirect("/Suyash_QueueSmart_Auth/index.html");
     });
 
-// Authentication pages
+
+    // Authentication pages.
     app.use(
         "/Suyash_QueueSmart_Auth",
         express.static(
-            path.join(root, "Suyash_QueueSmart_Auth", "Suyash_QueueSmart_Auth")
+            path.join(__dirname, "../Suyash_QueueSmart_Auth/Suyash_QueueSmart_Auth")
         )
     );
 
-// Admin pages (accessible at /admin.html, /queue.html, etc.)
-    app.use(express.static(adminDashPath));
 
-// Admin pages (also accessible through the full folder URL)
-    app.use(
-        "/Cameron_Culling_QueueSmart_AdminDash",
-        express.static(adminDashPath)
-    );
-
-// User dashboard
+    // User dashboard and queue pages.
     app.use(
         "/Harris_Khan_QueueSmart_userdash",
         express.static(
-            path.join(root, "Harris_Khan_QueueSmart_userdash")
+            path.join(__dirname, "../Harris_Khan_QueueSmart_userdash")
         )
     );
 
-// Notifications
+
+    // Admin dashboard pages.
+    app.use(
+        "/Cameron_Culling_QueueSmart_AdminDash",
+        express.static(
+            path.join(__dirname, "../Cameron_Culling_QueueSmart_AdminDash")
+        )
+    );
+
+
+    // Notifications pages.
     app.use(
         "/Sarah_Andrus_QueueSmart_Notifs",
         express.static(
-            path.join(root, "Sarah_Andrus_QueueSmart_Notifs")
+            path.join(__dirname, "../Sarah_Andrus_QueueSmart_Notifs")
         )
     );
 
-    // Shared files
+
+    // Shared frontend JavaScript files.
     app.use(
         "/shared",
-        express.static(path.join(root, "shared"))
+        express.static(
+            path.join(__dirname, "../shared")
+        )
     );
 
-    // Unknown API endpoint
+
+    // --------------------------------------------------
+    // API FALLBACK
+    // --------------------------------------------------
+
+    // Return a JSON response for unknown API endpoints.
     app.use("/api", (req, res) => {
         return fail(res, 404, "API endpoint not found.");
     });
 
-    // Handle unexpected server errors
-    app.use((err, req, res, next) => {
-        if (err && err.type === "entity.parse.failed") {
-            return fail(res, 400, "Invalid JSON request body.");
+
+    // General error handler.
+    app.use((error, req, res, next) => {
+        console.error(error);
+
+        if (res.headersSent) {
+            return next(error);
         }
-        console.error(err);
-        return fail(res, 500, "Internal server error.");
+
+        return fail(
+            res,
+            500,
+            "An unexpected server error occurred."
+        );
     });
+
 
     return app;
 }
+
 
 module.exports = { createApp };

@@ -50,7 +50,7 @@ window.QueueSmart = {
                 result.token
             );
 
-            window.location.href = "/admin.html";
+            window.location.href = "../Cameron_Culling_QueueSmart_AdminDash/admin.html";
         } else {
             sessionStorage.removeItem("queuesmartAdminToken");
 

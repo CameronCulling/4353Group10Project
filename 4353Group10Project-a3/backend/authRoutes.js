@@ -1,69 +1,148 @@
-const { randomUUID, randomBytes } = require('node:crypto');
-const { hashPassword, verifyPassword } = require('./store');
+const { randomBytes } = require('node:crypto');
+const { verifyPassword } = require('./store');
 const { registrationError, loginError } = require('./validation');
 
+// Return only safe public user information
 const publicUser = user => ({
-  id: user.id,
-  name: user.name,
-  email: user.email,
-  role: user.role
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role
 });
 
-function createAuthMiddleware(store, fail) {
-  return (req, res, next) => {
-    const match = /^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization || '');
-    const userId = match && store.sessions.get(match[1]);
-    req.user = store.users.find(user => user.id === userId);
-    if (!req.user) return fail(res, 401, 'Please sign in first.');
-    next();
-  };
-}
+// Check authentication tokens
+function createAuthMiddleware(store, fail, users) {
+    return (req, res, next) => {
+        const match = /^Bearer ([a-f0-9]{64})$/.exec(
+            req.headers.authorization || ''
+        );
 
-function registerAuthRoutes(app, store, fail, auth) {
-  function createSession(user) {
-    const token = randomBytes(32).toString('hex');
-    store.sessions.set(token, user.id);
-    return { token, user: publicUser(user) };
-  }
+        const userId = match
+            ? store.sessions.get(match[1])
+            : null;
 
-  // Create regular-user accounts. Users cannot self-assign admin rights.
-  app.post('/api/auth/register', (req, res) => {
-    const error = registrationError(req.body);
-    if (error) return fail(res, 400, error);
+        // Registered users come from SQLite.
+        req.user = userId ? users.findById(userId) : null;
 
-    const email = req.body.email.trim().toLowerCase();
-    if (store.users.some(user => user.email === email)) {
-      return fail(res, 409, 'Email is already registered.');
-    }
-    const user = {
-      id: randomUUID(),
-      name: req.body.name.trim(),
-      email,
-      passwordHash: hashPassword(req.body.password),
-      role: 'user'
+        if (!req.user) {
+            return fail(res, 401, 'Please sign in first.');
+        }
+
+        next();
     };
-    store.users.push(user);
-    res.status(201).json(createSession(user));
-  });
-
-  // Check password, create a random session token, and return public details.
-  app.post('/api/auth/login', (req, res) => {
-    const error = loginError(req.body);
-    if (error) return fail(res, 400, error);
-    const email = req.body.email.trim().toLowerCase();
-    const user = store.users.find(person => person.email === email);
-    if (!user || !verifyPassword(req.body.password, user.passwordHash)) {
-      return fail(res, 401, 'Invalid email or password.');
-    }
-    res.json(createSession(user));
-  });
-
-  app.get('/api/me', auth, (req, res) => res.json(publicUser(req.user)));
-
-  app.post('/api/auth/logout', auth, (req, res) => {
-    store.sessions.delete(req.headers.authorization.slice(7));
-    res.json({ message: 'Signed out.' });
-  });
 }
 
-module.exports = { createAuthMiddleware, registerAuthRoutes };
+function registerAuthRoutes(app, store, fail, auth, users) {
+
+    function createSession(user) {
+        const token = randomBytes(32).toString('hex');
+
+        store.sessions.set(token, user.id);
+
+        return {
+            token,
+            user: publicUser(user)
+        };
+    }
+
+    // REGISTER USER
+    app.post('/api/auth/register', (req, res, next) => {
+
+        const error = registrationError(req.body);
+
+        if (error) {
+            return fail(res, 400, error);
+        }
+
+        const email = req.body.email.trim().toLowerCase();
+
+        // Check for an existing SQLite account
+        if (users.findByEmail(email)) {
+            return fail(
+                res,
+                409,
+                'Email is already registered.'
+            );
+        }
+
+        try {
+            // Save credentials and profile in SQLite
+            const user = users.createUser({
+                name: req.body.name,
+                email: email,
+                password: req.body.password
+            });
+
+            return res.status(201).json(
+                createSession(user)
+            );
+
+        } catch (error) {
+
+            // Handle duplicate emails even if two requests
+            // attempt to register at the same time.
+            if (
+                error.code === 'SQLITE_CONSTRAINT_UNIQUE' ||
+                error.message?.includes('UNIQUE constraint failed')
+            ) {
+                return fail(
+                    res,
+                    409,
+                    'Email is already registered.'
+                );
+            }
+
+            return next(error);
+        }
+    });
+
+    // LOGIN USER
+    app.post('/api/auth/login', (req, res) => {
+
+        const error = loginError(req.body);
+
+        if (error) {
+            return fail(res, 400, error);
+        }
+
+        const email = req.body.email.trim().toLowerCase();
+
+        // Retrieve from SQLite, with legacy admin fallback
+        const user = users.findByEmail(email);
+
+        if (
+            !user ||
+            !verifyPassword(req.body.password, user.passwordHash)
+        ) {
+            return fail(
+                res,
+                401,
+                'Invalid email or password.'
+            );
+        }
+
+        return res.json(createSession(user));
+    });
+
+    // GET CURRENT USER
+    app.get('/api/me', auth, (req, res) => {
+        res.json(publicUser(req.user));
+    });
+
+    // LOGOUT USER
+    app.post('/api/auth/logout', auth, (req, res) => {
+
+        store.sessions.delete(
+            req.headers.authorization.slice(7)
+        );
+
+        res.json({
+            message: 'Signed out.'
+        });
+    });
+}
+
+module.exports = {
+    createAuthMiddleware,
+    registerAuthRoutes
+};

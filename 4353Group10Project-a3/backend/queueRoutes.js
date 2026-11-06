@@ -1,215 +1,168 @@
-const {
-    recordQueueJoin,
-    recordQueueExit,
-    notifyNearbyUsers
-} = require("./activityLogic");
+
+"use strict";
 
 const {
     estimateWait,
-    joinQueue,
-    leaveQueue,
-    getQueueStatus
+    validServiceId
 } = require("./queueLogic");
 
-function registerQueueRoutes(app, store, fail, auth) {
-
-    // Temporary services until teammate's service module is ready
-    if (!store.services) {
-        store.services = [
-            {
-                id: "dmv",
-                name: "DMV Services",
-                duration: 5
-            },
-            {
-                id: "advising",
-                name: "Student Advising",
-                duration: 10
-            },
-            {
-                id: "financial",
-                name: "Financial Aid",
-                duration: 8
-            }
-        ];
-    }
-
-    if (!store.queues) {
-        store.queues = {};
-    }
-
-    function findService(serviceId) {
-        return store.services.find(
-            service => service.id === serviceId
-        );
-    }
-
-    function getQueue(serviceId) {
-        if (!store.queues[serviceId]) {
-            store.queues[serviceId] = [];
-        }
-
-        return store.queues[serviceId];
-    }
-
-    function validServiceId(serviceId) {
-        return typeof serviceId === "string" &&
-            serviceId.length > 0 &&
-            serviceId.length <= 100;
-    }
+function registerQueueRoutes(
+    app,
+    store,
+    fail,
+    auth,
+    queueRepository
+) {
 
     // JOIN QUEUE
     app.post("/api/queues/:serviceId/join", auth, (req, res) => {
-
         const { serviceId } = req.params;
 
         if (!validServiceId(serviceId)) {
             return fail(res, 400, "Invalid service ID.");
         }
 
-        const service = findService(serviceId);
+        const service = queueRepository.findService(serviceId);
 
         if (!service) {
             return fail(res, 404, "Service not found.");
         }
 
-        const queue = getQueue(serviceId);
-
         try {
-            const result = joinQueue(queue, req.user.id);
-
-            const entry = queue.find(
-                item => item.userId === req.user.id
+            const entry = queueRepository.joinQueue(
+                serviceId,
+                req.user.id
             );
 
-            recordQueueJoin(store, req.user.id, service, entry);
-            notifyNearbyUsers(store, service, queue);
-
-            res.status(201).json({
+            return res.status(201).json({
                 message: "Successfully joined queue.",
                 serviceId,
                 serviceName: service.name,
                 userId: req.user.id,
-                position: result.position,
+                position: entry.position,
                 estimatedWait: estimateWait(
-                    result.position,
+                    entry.position,
                     service.duration
                 ),
                 status: "waiting"
             });
 
         } catch (error) {
+            if (error.message === "Service not found.") {
+                return fail(res, 404, error.message);
+            }
+
+            if (error.message === "Invalid user ID.") {
+                return fail(res, 400, error.message);
+            }
+
             return fail(res, 409, error.message);
         }
     });
 
+
     // LEAVE QUEUE
     app.delete("/api/queues/:serviceId/leave", auth, (req, res) => {
-
         const { serviceId } = req.params;
 
         if (!validServiceId(serviceId)) {
             return fail(res, 400, "Invalid service ID.");
         }
 
-        const service = findService(serviceId);
+        const service = queueRepository.findService(serviceId);
 
         if (!service) {
             return fail(res, 404, "Service not found.");
         }
 
-        const queue = getQueue(serviceId);
-
         try {
-            const entry = leaveQueue(queue, req.user.id);
-
-            recordQueueExit(
-                store,
-                req.user.id,
-                service,
-                entry,
-                "left"
+            queueRepository.leaveQueue(
+                serviceId,
+                req.user.id
             );
 
-            notifyNearbyUsers(store, service, queue);
-
-            res.json({
+            return res.json({
                 message: "Successfully left queue.",
                 serviceId
             });
 
         } catch (error) {
-            return fail(res, 404, error.message);
+            if (error.message === "User is not in this queue.") {
+                return fail(res, 404, error.message);
+            }
+
+            if (error.message === "Invalid user ID.") {
+                return fail(res, 400, error.message);
+            }
+
+            return fail(res, 409, error.message);
         }
     });
 
+
     // GET CURRENT QUEUE STATUS
     app.get("/api/queues/:serviceId/status", auth, (req, res) => {
-
         const { serviceId } = req.params;
 
         if (!validServiceId(serviceId)) {
             return fail(res, 400, "Invalid service ID.");
         }
 
-        const service = findService(serviceId);
+        const service = queueRepository.findService(serviceId);
 
         if (!service) {
             return fail(res, 404, "Service not found.");
         }
 
-        const queue = getQueue(serviceId);
-
-        const status = getQueueStatus(
-            queue,
-            req.user.id,
-            service.duration
+        const status = queueRepository.getQueueStatus(
+            serviceId,
+            req.user.id
         );
 
         if (!status) {
             return fail(res, 404, "You are not in this queue.");
         }
 
-        res.json({
+        return res.json({
             serviceId,
             serviceName: service.name,
             ...status
         });
     });
 
+
     // GET ESTIMATED WAIT BEFORE JOINING
     app.get("/api/queues/:serviceId/estimate", auth, (req, res) => {
-
         const { serviceId } = req.params;
 
         if (!validServiceId(serviceId)) {
             return fail(res, 400, "Invalid service ID.");
         }
 
-        const service = findService(serviceId);
+        const service = queueRepository.findService(serviceId);
 
         if (!service) {
             return fail(res, 404, "Service not found.");
         }
 
-        const queue = getQueue(serviceId);
-
-        const existingIndex = queue.findIndex(
-            entry => entry.userId === req.user.id
+        const estimate = queueRepository.getEstimatedPosition(
+            serviceId,
+            req.user.id
         );
 
-        const position = existingIndex === -1
-            ? queue.length + 1
-            : existingIndex + 1;
+        if (!estimate) {
+            return fail(
+                res,
+                409,
+                "This service is currently closed."
+            );
+        }
 
-        res.json({
+        return res.json({
             serviceId,
             serviceName: service.name,
-            position,
-            estimatedWait: estimateWait(
-                position,
-                service.duration
-            )
+            position: estimate.position,
+            estimatedWait: estimate.estimatedWait
         });
     });
 }

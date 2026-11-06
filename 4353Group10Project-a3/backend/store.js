@@ -52,15 +52,7 @@ function verifyPassword(password, storedHash) {
 
 function createStore() {
     return {
-        users: [
-            {
-                id: randomUUID(),
-                name: "QueueSmart Admin",
-                email: "admin@queuesmart.local",
-                passwordHash: hashPassword("Admin12345!"),
-                role: "admin"
-            }
-        ],
+        users: [],
 
         sessions: new Map(),
 
