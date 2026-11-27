@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Queue Status | QueueSmart</title>
+    <link rel="stylesheet" href="user.css">
+</head>
+<body>
+
+<header class="site-header">
+    <a class="logo" href="dashboard.html">
+        queue<span>smart.</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="join-queue.html">Join Queue</a>
+        <a class="active" href="queue-status.html">Queue Status</a>
+        <a href="history.html">History</a>
+        <a href="/Sarah_Andrus_QueueSmart_Notifs/notifications.html">Notifications</a>
+        <a class="logout-link"
+           href="/Suyash_QueueSmart_Auth/index.html"
+           onclick="QueueSmart.clearSession()">Sign out</a>
+    </nav>
+</header>
+
+<main class="page-container">
+
+    <section class="page-heading">
+        <p class="overline">CURRENT QUEUE</p>
+        <h1>Your place in line.</h1>
+        <p>
+            We'll keep you updated as the queue moves.
+        </p>
+    </section>
+
+    <section class="queue-status-card">
+        <h2 id="service-name">Loading service...</h2>
+
+        <p class="queue-service">Current queue</p>
+
+        <div class="position-label">YOUR POSITION</div>
+
+        <div class="position-number" id="position">
+            --
+        </div>
+
+        <div class="wait-label">ESTIMATED WAIT</div>
+
+        <div class="wait-time" id="wait-time">
+            Calculating...
+        </div>
+
+        <div class="wait-label">STATUS</div>
+
+        <span class="status-badge" id="status">
+            Loading...
+        </span>
+
+        <p id="status-message" role="status" aria-live="polite"></p>
+
+        <br>
+
+        <button class="danger-button"
+                id="leave-button"
+                type="button">
+            Leave Queue
+        </button>
+    </section>
+
+    <br>
+
+    <section class="card">
+        <h2>Recent updates</h2>
+
+        <div class="notification-list" id="queue-updates">
+            <div class="notification">
+                Your queue information will appear here.
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="../shared/api.js"></script>
+<script src="queue-status-ui.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | QueueSmart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <h1>QueueSmart Admin</h1>
+        <nav>
+            <a href="admin.html">Dashboard</a>
+            <a href="services.html">Services</a>
+            <a href="queue.html">Queues</a>
+            <a href="reports.html" aria-current="page">Reports</a>
+            <a href="/Suyash_QueueSmart_Auth/index.html" id="signOutLink">Sign out</a>
+        </nav>
+    </header>
+
+    <main class="container reports-container">
+        <section class="page-header">
+            <div>
+                <h2>Reporting</h2>
+                <p>Review customer participation, service activity, and queue usage.</p>
+            </div>
+        </section>
+
+        <section class="card report-filters">
+            <div class="section-header"><h2>Report Filters</h2></div>
+            <div class="report-filter-grid">
+                <div class="form-group">
+                    <label for="startDate">Start date</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End date</label>
+                    <input type="date" id="endDate">
+                </div>
+                <div class="form-group">
+                    <label for="serviceFilter">Service</label>
+                    <select id="serviceFilter">
+                        <option value="">All services</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="button primary" id="applyFilters" type="button">Apply Filters</button>
+                <button class="button secondary" id="clearFilters" type="button">Clear Filters</button>
+            </div>
+            <p class="report-note">Date filters apply to historical queue participation based on the time the user joined. Current queue counts show the live system state.</p>
+        </section>
+
+        <section class="stats report-stats" aria-label="Queue overview statistics">
+            <div class="stat-card"><h3>Total Queue Entries</h3><p id="totalEntries">—</p></div>
+            <div class="stat-card"><h3>Users Served</h3><p id="usersServed">—</p></div>
+            <div class="stat-card"><h3>Currently Waiting</h3><p id="currentlyWaiting">—</p></div>
+            <div class="stat-card"><h3>Average Wait</h3><p><span id="averageWait">—</span> <small>min</small></p></div>
+        </section>
+
+        <section class="card">
+            <div class="section-header report-section-heading">
+                <div>
+                    <h2>User Participation History</h2>
+                    <p>Customers and their recorded queue visits.</p>
+                </div>
+                <button class="button primary export-button" type="button" data-export="users">Export Users CSV</button>
+            </div>
+            <div class="report-table-wrap" id="usersReport">
+                <p>Loading user participation...</p>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="section-header report-section-heading">
+                <div>
+                    <h2>Service Activity</h2>
+                    <p>Queue usage and wait-time statistics by service.</p>
+                </div>
+                <button class="button primary export-button" type="button" data-export="services">Export Services CSV</button>
+            </div>
+            <div class="report-table-wrap" id="servicesReport">
+                <p>Loading service activity...</p>
+            </div>
+        </section>
+
+        <section class="card report-export-overview">
+            <div>
+                <h2>Queue Overview Export</h2>
+                <p>Download a one-row summary of the current filters and queue activity.</p>
+            </div>
+            <button class="button primary export-button" type="button" data-export="overview">Export Overview CSV</button>
+        </section>
+    </main>
+    <script src="reports.js"></script>
+</body>
+</html>

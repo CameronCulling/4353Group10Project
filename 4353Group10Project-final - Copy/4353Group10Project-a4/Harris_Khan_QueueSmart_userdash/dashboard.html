@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | QueueSmart</title>
+    <link rel="stylesheet" href="user.css">
+</head>
+<body>
+
+<header class="site-header">
+    <a class="logo" href="dashboard.html">
+        queue<span>smart.</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+        <a class="active" href="dashboard.html">Dashboard</a>
+        <a href="join-queue.html">Join Queue</a>
+        <a href="queue-status.html">Queue Status</a>
+        <a href="history.html">History</a>
+        <a href="/Sarah_Andrus_QueueSmart_Notifs/notifications.html">Notifications</a>
+        <a class="logout-link" href="/Suyash_QueueSmart_Auth/index.html"
+           onclick="QueueSmart.clearSession()">Sign out</a>
+    </nav>
+</header>
+
+<main class="page-container">
+
+    <section class="page-heading">
+        <p class="overline">YOUR QUEUES</p>
+        <h1>Welcome back.</h1>
+        <p>
+            See your current queue, explore available services,
+            and keep track of your recent activity.
+        </p>
+    </section>
+
+    <!-- Current queue information -->
+    <section class="dashboard-grid">
+        <div class="stat-card">
+            <h3>CURRENT POSITION</h3>
+            <div class="stat-number" id="current-position">--</div>
+            <div class="stat-description" id="current-service">
+                No active queue
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <h3>ESTIMATED WAIT</h3>
+            <div class="stat-number" id="current-wait">--</div>
+            <div class="stat-description">Approximately</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>QUEUE STATUS</h3>
+            <div class="stat-number" id="current-status">--</div>
+            <div class="stat-description" id="status-description">
+                Join a service to get started.
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-sections">
+
+        <!-- Services are loaded from the backend -->
+        <div class="card">
+            <h2>Available services</h2>
+            <p>
+                Choose an open service to join its queue.
+            </p>
+
+            <div class="service-list" id="service-list">
+                <p>Loading services...</p>
+            </div>
+        </div>
+
+        <!-- Notifications preview -->
+        <div class="card">
+            <h2>Notifications</h2>
+            <p>Recent queue updates.</p>
+
+            <div class="notification-list" id="notification-list">
+                <p>Loading notifications...</p>
+            </div>
+
+            <p>
+                <a href="/Sarah_Andrus_QueueSmart_Notifs/notifications.html">
+                    View all notifications
+                </a>
+            </p>
+        </div>
+
+    </section>
+</main>
+
+<script src="../shared/api.js"></script>
+<script src="dashboard-ui.js"></script>
+
+</body>
+</html>
