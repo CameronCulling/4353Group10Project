@@ -5,6 +5,7 @@ const express = require("express");
 const path = require("node:path");
 
 const { createStore } = require("./store");
+const { registerAdminProtection } = require("./adminAccess");
 
 const { getDefaultDatabase } = require("./db");
 const { createUserRepository } = require("./userRepository");
@@ -60,6 +61,9 @@ function createApp({
         users
     );
 
+
+    // Protect all current and future administrator API routes.
+    registerAdminProtection(app, auth, fail);
 
     // Register API routes.
     registerAuthRoutes(
