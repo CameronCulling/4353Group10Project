@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Join Queue | QueueSmart</title>
+    <link rel="stylesheet" href="user.css">
+</head>
+<body>
+
+<header class="site-header">
+    <a class="logo" href="dashboard.html">
+        queue<span>smart.</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+        <a href="dashboard.html">Dashboard</a>
+        <a class="active" href="join-queue.html">Join Queue</a>
+        <a href="queue-status.html">Queue Status</a>
+        <a href="history.html">History</a>
+        <a href="/Sarah_Andrus_QueueSmart_Notifs/notifications.html">Notifications</a>
+        <a class="logout-link" href="/Suyash_QueueSmart_Auth/index.html"
+           onclick="QueueSmart.clearSession()">Sign out</a>
+    </nav>
+</header>
+
+<main class="page-container">
+
+    <section class="page-heading">
+        <p class="overline">JOIN A QUEUE</p>
+        <h1>Choose a service.</h1>
+        <p>
+            Select an available service to see the current
+            estimated wait and join its queue.
+        </p>
+    </section>
+
+    <section class="form-card">
+        <form id="queue-form">
+
+            <div class="field">
+                <label for="service">Service</label>
+
+                <select id="service" name="service" required>
+                    <option value="" selected disabled>
+                        Loading services...
+                    </option>
+                </select>
+
+                <small>
+                    Only currently open services are listed.
+                </small>
+            </div>
+
+            <div class="card">
+                <h3>ESTIMATED WAIT</h3>
+
+                <p id="wait-display" aria-live="polite">
+                    Select a service to see the estimated wait.
+                </p>
+            </div>
+
+            <br>
+
+            <button class="primary-button" type="submit">
+                Join Queue
+            </button>
+
+        </form>
+    </section>
+
+</main>
+
+<script src="../shared/api.js"></script>
+<script src="queue-ui.js"></script>
+
+</body>
+</html>

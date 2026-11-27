@@ -1,0 +1,41 @@
+:root { font-family: Arial, Helvetica, sans-serif; color: #183139; background: #f4f8f6; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input, select { font: inherit; }
+a { color: #116b54; }
+.auth-layout { min-height: 100vh; display: grid; grid-template-columns: minmax(320px, 1fr) minmax(380px, 1fr); }
+.intro { color: #fff; background: #10383b; padding: clamp(28px, 5vw, 72px); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+.intro::after { content: ''; width: 330px; height: 330px; border: 55px solid #55d5aa22; border-radius: 50%; position: absolute; bottom: -180px; right: -140px; pointer-events: none; }
+.logo { color: #fff; font-size: 25px; font-weight: 800; letter-spacing: -1px; text-decoration: none; position: relative; z-index: 1; }
+.logo span { color: #66dfb7; }
+.intro-copy { position: relative; z-index: 1; max-width: 490px; }
+.overline { color: #168566; font-size: 12px; font-weight: 800; letter-spacing: 2px; }
+.intro .overline { color: #79ddbc; }
+.intro h1 { font-size: clamp(35px, 4.5vw, 58px); line-height: 1.11; letter-spacing: -2px; margin: 14px 0 20px; }
+.intro-copy > p:last-child { color: #c1d9d5; line-height: 1.65; font-size: 17px; }
+.intro-foot { color: #b1d1cb; font-size: 13px; position: relative; z-index: 1; }
+.form-panel { display: grid; place-items: center; padding: 36px 24px; background: #fff; }
+.form-content { width: min(100%, 410px); }
+.form-content h2 { font-size: 33px; letter-spacing: -1px; margin: 8px 0; }
+.form-subtitle { color: #6b8185; line-height: 1.5; margin: 0 0 29px; }
+.field { margin: 0 0 19px; }
+.field label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.field input, .field select { display: block; width: 100%; border: 1px solid #cbdad7; border-radius: 10px; padding: 13px 14px; min-height: 48px; background: white; color: #183139; }
+.field input:focus-visible, .field select:focus-visible, .primary-button:focus-visible, a:focus-visible { outline: 3px solid #7dd8b5; outline-offset: 2px; }
+.field small { color: #708488; display: block; margin-top: 6px; font-size: 12px; }
+.primary-button { width: 100%; border: 0; border-radius: 10px; background: #15765e; color: white; min-height: 49px; font-weight: 700; cursor: pointer; }
+.primary-button:hover { background: #0d5f4a; }
+.switch-page { text-align: center; color: #5f7478; margin: 22px 0 0; font-size: 14px; }
+.switch-page + .switch-page { margin-top: 12px; }
+.switch-page a { font-weight: 700; text-decoration: none; }
+.switch-page a:hover { text-decoration: underline; }
+.demo-note { border-left: 3px solid #34aa83; border-radius: 5px; background: #edf8f3; color: #386454; font-size: 13px; line-height: 1.45; padding: 12px 14px; margin-top: 28px; }
+@media (max-width: 760px) {
+  .auth-layout { grid-template-columns: 1fr; }
+  .intro { min-height: 240px; padding: 24px; gap: 18px; }
+  .intro h1 { font-size: clamp(30px, 7vw, 39px); margin: 8px 0; }
+  .intro-copy > p:last-child { font-size: 14px; margin: 0; }
+  .intro-foot { display: none; }
+  .form-panel { padding: 32px 22px 48px; }
+}
+@media (max-width: 380px) { .intro { min-height: 210px; } .form-content h2 { font-size: 29px; } }
